@@ -68,7 +68,8 @@ Cloneya must be invoked on a wrapper with the clonable items as children. It aut
             clonePosition	: 'after',
             serializeID     : true,
             ignore	    	    : 'label.error',
-            preserveChildCount  : false
+            preserveChildCount  : false,
+            selectize: true
         });
 ```
 

@@ -25,7 +25,8 @@
         deepClone: false,
         serializeID: true,
         ignore: 'label.error',
-        preserveChildCount: false
+        preserveChildCount: false,
+        selectize: false
     };
     /**
      * Create the class CloneYa
@@ -288,7 +289,7 @@
                         selectizeElements[$(this).attr('id')] = {
                             inputOptions: $(this)[0].selectize.options,
                             inputValue:   $(this)[0].selectize.getValue()
-                        }
+                        };
 
                         // Destroy the selectize.js element
                         $(this)[0].selectize.destroy();
@@ -314,14 +315,13 @@
                 // Re-enable any selectize.js fields if needed, adding back
                 // any options and selected values to the original row.
                 if (!$.isEmptyObject(selectizeElements)){
-                    $.each(selectizeElements, function(key, value) {
+                    $.each(selectizeElements, function() {
                         toClone.find('select').selectize();
                         newClone.find('select').selectize();
-                    })
+                    });
 
                     // Copy back options and values to cloned row
                     $.each(selectizeElements, function(key, value) {
-                        console.log(toClone.find('select'));
                         toClone.find('select')[0].selectize.addOption(value.inputOptions);
                         toClone.find('select')[0].selectize.setValue(value.inputValue);
                     });
