@@ -4,6 +4,9 @@
         <title>jQuery CloneYa demo</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.1/css/selectize.bootstrap3.css">
         <style type="text/css">
             .demo-wrap{
                 margin: 40px auto;
@@ -74,7 +77,16 @@
                     <p class="web"> 
                         <input type="text" name="web[]" id="sweb" /> 
                         <label for="web">Website</label> 
-                    </p>  
+                    </p>
+                    
+                    <div>
+                        <select class="select">
+                          <option value="mustard">Mustard</option>
+                          <option value="ketchup">Ketchup</option>
+                          <option value="relish">Relish</option>
+                        </select>
+                    </div>
+
                     <a href="#" class="clone">clone</a>
                     <a href="#" class="delete">delete</a>
                 </div>
@@ -282,9 +294,19 @@
 
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.js">
         </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
+        <script src="../dist/jquery-ui.js"></script>
+        <script src="../dist/selectize.js"></script>
         <script src="../dist/jquery-cloneya.js"></script>
         <script>
-            $('#simple-clone').cloneya();
+
+            $(document).ready(function(){
+                $('.select').selectize();
+            });
+
+            $('#simple-clone').cloneya({
+                selectize: true
+            });
 
             $('.nest-clone').cloneya();
 

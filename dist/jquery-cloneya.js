@@ -98,6 +98,7 @@
          * 
          * @type @exp;elem@call;closestChild
          */
+
         this.clones = this.$elem.closestChild(this.config.cloneThis);
 
         this.init();
@@ -266,15 +267,78 @@
         _cloneItem: function (toClone) {
             var $this = this;
 
-            // clone it
-            /**
-             * 
-             * @type @exp;$toclone@call;clone
-             */
-            var newClone = toClone.clone({
-                withDataAndEvents: $this.config.dataClone,
-                deepWithDataAndEvents: $this.config.deepClone
-            });
+            // var name = $this.config.destroyName;
+
+            // var destroycall = $this.config.destroyCall;
+
+            // toClone.find('select')[name][destroycall];
+
+            var selectizeElements = {};
+            var newClone;
+            if($this.config.selectize){
+
+                // Determine if selectize.js is in use on any element and disable
+                // before cloning.
+                
+                toClone.find('select').each(function() {
+                    if ($(this)[0].selectize) {
+
+                        // Store last row's current options and value(s) to
+                        // restore after destroying for clone purposes.
+                        selectizeElements[$(this).attr('id')] = {
+                            inputOptions: $(this)[0].selectize.options,
+                            inputValue:   $(this)[0].selectize.getValue()
+                        }
+
+                        // Destroy the selectize.js element
+                        $(this)[0].selectize.destroy();
+                    }
+                });
+
+                // clone it
+                /**
+                 * 
+                 * @type @exp;$toclone@call;clone
+                 */
+                newClone = toClone.clone({
+                    withDataAndEvents: $this.config.dataClone,
+                    deepWithDataAndEvents: $this.config.deepClone
+                });
+
+                // Clear any data that was already entered in the cloned row
+                newClone.find( 'input,select,textarea' ).each(function() {
+                    $(this).val( '' );
+                    $(this).attr( 'checked', false );
+                });
+
+                // Re-enable any selectize.js fields if needed, adding back
+                // any options and selected values to the original row.
+                if (!$.isEmptyObject(selectizeElements)){
+                    $.each(selectizeElements, function(key, value) {
+                        toClone.find('select').selectize();
+                        newClone.find('select').selectize();
+                    })
+
+                    // Copy back options and values to cloned row
+                    $.each(selectizeElements, function(key, value) {
+                        console.log(toClone.find('select'));
+                        toClone.find('select')[0].selectize.addOption(value.inputOptions);
+                        toClone.find('select')[0].selectize.setValue(value.inputValue);
+                    });
+                }
+            }else{
+                // clone it
+                /**
+                 * 
+                 * @type @exp;$toclone@call;clone
+                 */
+                newClone = toClone.clone({
+                    withDataAndEvents: $this.config.dataClone,
+                    deepWithDataAndEvents: $this.config.deepClone
+                });
+            }
+
+            
 
             // we want to preserve the initial child count
             if ($this.config.preserveChildCount !== false) {
